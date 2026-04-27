@@ -1,0 +1,342 @@
+# Nav2 parameter file for Duckietown DM21 — differential-drive, real robot.
+# Localization: RTAB-Map publishes map→odom and map→base_link via VIO front-end.
+# No sim_time, no EKF (RTAB-Map fuses IMU internally), no AMCL.
+# Obstacle detection: depthimage_to_laserscan converts OAK-D depth → /scan.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BT Navigator
+# ─────────────────────────────────────────────────────────────────────────────
+bt_navigator:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: map              # RTAB-Map SLAM back-end publishes map→odom
+    robot_base_frame: base_link
+    odom_topic: /odom              # rtabmap_odom VIO front-end
+    bt_loop_duration: 10           # ms — default tick rate
+    default_server_timeout: 20     # ms
+    wait_for_service_timeout: 1000 # ms
+    action_server_result_timeout: 900.0
+    transform_tolerance: 0.3       # generous; VIO timestamps can lag under Wi-Fi load
+    bond_heartbeat_period: 0.1
+
+    # Uses Nav2's built-in BT — no custom XML needed for basic waypoint following.
+    # Resolves to: nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
+    navigators: ['navigate_to_pose', 'navigate_through_poses']
+    navigate_to_pose:
+      plugin: "nav2_bt_navigator/NavigateToPoseNavigator"
+    navigate_through_poses:
+      plugin: "nav2_bt_navigator/NavigateThroughPosesNavigator"
+
+    error_code_names:
+      - compute_path_error_code
+      - follow_path_error_code
+
+    # Full set of BT action/condition plugins so the default BT XML loads cleanly.
+    plugin_lib_names:
+      - nav2_compute_path_to_pose_action_bt_node
+      - nav2_compute_path_through_poses_action_bt_node
+      - nav2_smooth_path_action_bt_node
+      - nav2_follow_path_action_bt_node
+      - nav2_spin_action_bt_node
+      - nav2_wait_action_bt_node
+      - nav2_assisted_teleop_action_bt_node
+      - nav2_back_up_action_bt_node
+      - nav2_drive_on_heading_bt_node
+      - nav2_clear_costmap_service_bt_node
+      - nav2_is_stuck_condition_bt_node
+      - nav2_goal_reached_condition_bt_node
+      - nav2_goal_updated_condition_bt_node
+      - nav2_globally_updated_goal_condition_bt_node
+      - nav2_is_path_valid_condition_bt_node
+      - nav2_initial_pose_received_condition_bt_node
+      - nav2_reinitialize_global_localization_service_bt_node
+      - nav2_rate_controller_bt_node
+      - nav2_distance_controller_bt_node
+      - nav2_speed_controller_bt_node
+      - nav2_truncate_path_action_bt_node
+      - nav2_truncate_path_local_action_bt_node
+      - nav2_goal_updater_node_bt_node
+      - nav2_recovery_node_bt_node
+      - nav2_pipeline_sequence_bt_node
+      - nav2_round_robin_node_bt_node
+      - nav2_transform_available_condition_bt_node
+      - nav2_time_expired_condition_bt_node
+      - nav2_path_expiring_timer_condition
+      - nav2_distance_traveled_condition_bt_node
+      - nav2_single_trigger_bt_node
+      - nav2_goal_updated_controller_bt_node
+      - nav2_is_battery_low_condition_bt_node
+      - nav2_navigate_through_poses_action_bt_node
+      - nav2_navigate_to_pose_action_bt_node
+      - nav2_remove_passed_goals_action_bt_node
+      - nav2_planner_selector_bt_node
+      - nav2_controller_selector_bt_node
+      - nav2_goal_checker_selector_bt_node
+      - nav2_controller_cancel_bt_node
+      - nav2_path_longer_on_approach_bt_node
+      - nav2_wait_cancel_bt_node
+      - nav2_spin_cancel_bt_node
+      - nav2_back_up_cancel_bt_node
+      - nav2_assisted_teleop_cancel_bt_node
+      - nav2_drive_on_heading_cancel_bt_node
+      - nav2_is_battery_charging_condition_bt_node
+
+# Required companion rclcpp nodes for the BT navigator sub-trees.
+bt_navigator_navigate_through_poses_rclcpp_node:
+  ros__parameters:
+    use_sim_time: false
+
+bt_navigator_navigate_to_pose_rclcpp_node:
+  ros__parameters:
+    use_sim_time: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Controller Server — DWB local planner
+# ─────────────────────────────────────────────────────────────────────────────
+controller_server:
+  ros__parameters:
+    use_sim_time: false
+    controller_frequency: 10.0        # 10 Hz is ample for a max 0.20 m/s indoor robot
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.5     # diff-drive has no lateral motion; set high to ignore
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 0.3
+    odom_topic: "/odom"
+    progress_checker_plugin: "progress_checker"
+    goal_checker_plugins: ["general_goal_checker"]
+    controller_plugins: ["FollowPath"]
+
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.1   # small robot — 10 cm threshold is appropriate
+      movement_time_allowance: 10.0
+
+    general_goal_checker:
+      stateful: true
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.15         # 15 cm — reasonable for indoor waypoint nav
+      yaw_goal_tolerance: 0.25        # ~14 degrees
+
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: false
+
+      # ── Velocity limits — conservative for a small indoor robot ─────────
+      min_vel_x: -0.10
+      min_vel_y: 0.0                  # diff-drive: no lateral motion
+      max_vel_x: 0.20
+      max_vel_y: 0.0
+      max_vel_theta: 0.8
+      min_speed_xy: 0.0
+      max_speed_xy: 0.20
+      min_speed_theta: 0.0
+
+      # ── Acceleration / deceleration limits ───────────────────────────────
+      acc_lim_x: 2.5
+      acc_lim_y: 0.0                  # diff-drive: no lateral acceleration
+      acc_lim_theta: 3.2
+      decel_lim_x: -2.5
+      decel_lim_y: 0.0
+      decel_lim_theta: -3.2
+
+      # ── Trajectory sampling ───────────────────────────────────────────────
+      vx_samples: 20
+      vy_samples: 5                   # only forward; small count keeps CPU low
+      vtheta_samples: 20
+      sim_time: 1.7                   # seconds to forward-simulate each trajectory
+      linear_granularity: 0.05
+      angular_granularity: 0.025
+      transform_tolerance: 0.3
+      xy_goal_tolerance: 0.15         # must match general_goal_checker
+
+      # ── DWB critics ───────────────────────────────────────────────────────
+      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+      BaseObstacle.scale: 0.02
+      PathAlign.scale: 32.0
+      PathAlign.forward_point_distance: 0.1
+      GoalAlign.scale: 24.0
+      GoalAlign.forward_point_distance: 0.1
+      PathDist.scale: 32.0
+      GoalDist.scale: 24.0
+      RotateToGoal.scale: 32.0
+      RotateToGoal.slowing_factor: 5.0
+      RotateToGoal.lookahead_time: -1.0  # negative = use current velocity only
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Planner Server — NavFn (Dijkstra)
+# ─────────────────────────────────────────────────────────────────────────────
+planner_server:
+  ros__parameters:
+    use_sim_time: false
+    expected_planner_frequency: 1.0   # NavFn is cheap; 1 Hz avoids redundant re-plans
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner/NavfnPlanner"  # Dijkstra — simple, robust for indoors
+      tolerance: 0.5
+      use_astar: false                # false = Dijkstra as required; true would be A*
+      allow_unknown: true             # plan through unexplored cells
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Smoother Server
+# ─────────────────────────────────────────────────────────────────────────────
+smoother_server:
+  ros__parameters:
+    use_sim_time: false
+    smoother_plugins: ["simple_smoother"]
+    simple_smoother:
+      plugin: "nav2_smoother::SimpleSmoother"
+      tolerance: 1.0e-10
+      max_its: 1000
+      do_refinement: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Behavior Server — recovery behaviors
+# ─────────────────────────────────────────────────────────────────────────────
+behavior_server:
+  ros__parameters:
+    use_sim_time: false
+    costmap_topic: local_costmap/costmap_raw
+    footprint_topic: local_costmap/published_footprint
+    cycle_frequency: 10.0
+    behavior_plugins: ["spin", "backup", "drive_on_heading", "assisted_teleop", "wait"]
+    spin:
+      plugin: "nav2_behaviors/Spin"
+    backup:
+      plugin: "nav2_behaviors/BackUp"
+    drive_on_heading:
+      plugin: "nav2_behaviors/DriveOnHeading"
+    wait:
+      plugin: "nav2_behaviors/Wait"
+    assisted_teleop:
+      plugin: "nav2_behaviors/AssistedTeleop"
+    global_frame: odom               # recovery behaviors operate in odom frame
+    robot_base_frame: base_link
+    transform_tolerance: 0.3
+    simulate_ahead_time: 2.0
+    max_rotational_vel: 0.8          # match DWB max_vel_theta
+    min_rotational_vel: 0.2
+    rotational_acc_lim: 3.2
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Waypoint Follower
+# ─────────────────────────────────────────────────────────────────────────────
+waypoint_follower:
+  ros__parameters:
+    use_sim_time: false
+    loop_rate: 20
+    stop_on_failure: false           # continue to next waypoint even if one is unreachable
+    waypoint_task_executor_plugin: "wait_at_waypoint"
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      enabled: true
+      waypoint_pause_duration: 0     # no mandatory dwell between waypoints
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Velocity Smoother
+# ─────────────────────────────────────────────────────────────────────────────
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: false
+    smoothing_frequency: 20.0
+    scale_velocities: false
+    feedback: "OPEN_LOOP"            # no wheel encoder feedback available; use open-loop
+    max_velocity: [0.20, 0.0, 0.8]  # [x, y, theta] — matches DWB limits
+    min_velocity: [-0.10, 0.0, -0.8]
+    max_accel: [2.5, 0.0, 3.2]
+    max_decel: [-2.5, 0.0, -3.2]
+    odom_topic: "/odom"
+    odom_duration: 0.1
+    deadband_velocity: [0.0, 0.0, 0.0]
+    velocity_timeout: 1.0
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Local Costmap  (rolling window, odom frame)
+# ─────────────────────────────────────────────────────────────────────────────
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      use_sim_time: false
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      global_frame: odom             # local costmap tracks robot relative to odom
+      robot_base_frame: base_link
+      rolling_window: true           # centered on the robot at all times
+      width: 3                       # meters — covers DWB forward-simulation horizon
+      height: 3
+      resolution: 0.05               # 5 cm/cell
+      # Rectangular footprint for DM21: 18 cm × 12 cm centered on base_link
+      footprint: "[[0.09, 0.06], [0.09, -0.06], [-0.09, -0.06], [-0.09, 0.06]]"
+      footprint_padding: 0.01
+      transform_tolerance: 0.3
+      plugins: ["obstacle_layer", "inflation_layer"]
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan               # produced by depthimage_to_laserscan
+          data_type: "LaserScan"     # LaserScan — not PointCloud or depth_layer
+          clearing: true
+          marking: true
+          obstacle_max_range: 5.0
+          obstacle_min_range: 0.3    # match OAK-D minimum reliable depth (range_min=0.3)
+          raytrace_max_range: 5.5
+          raytrace_min_range: 0.0
+          max_obstacle_height: 2.0
+          min_obstacle_height: 0.0
+          inf_is_valid: false
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        enabled: true
+        inflation_radius: 0.15       # per spec — keeps robot away from tight corners
+        cost_scaling_factor: 3.5
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Global Costmap  (static, map frame)
+# ─────────────────────────────────────────────────────────────────────────────
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      use_sim_time: false
+      update_frequency: 1.0
+      publish_frequency: 1.0
+      global_frame: map              # RTAB-Map SLAM back-end publishes the map frame
+      robot_base_frame: base_link
+      resolution: 0.05
+      rolling_window: false          # static global map covering the full RTAB-Map extent
+      track_unknown_space: true      # allow NavFn to plan through unmapped regions
+      # Rectangular footprint — same as local costmap
+      footprint: "[[0.09, 0.06], [0.09, -0.06], [-0.09, -0.06], [-0.09, 0.06]]"
+      footprint_padding: 0.01
+      transform_tolerance: 0.3
+      always_send_full_costmap: true # publish complete map so RViz gets a full picture
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        map_subscribe_transient_local: true  # receive the latched /map from RTAB-Map
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          data_type: "LaserScan"
+          clearing: true
+          marking: true
+          obstacle_max_range: 5.0
+          obstacle_min_range: 0.3    # match OAK-D minimum reliable depth
+          raytrace_max_range: 5.5
+          raytrace_min_range: 0.0
+          max_obstacle_height: 2.0
+          min_obstacle_height: 0.0
+          inf_is_valid: false
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        enabled: true
+        inflation_radius: 0.15
+        cost_scaling_factor: 3.5
