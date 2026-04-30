@@ -45,7 +45,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-apriltag-msgs \
     ros-humble-depthimage-to-laserscan \
     ros-humble-tf2-geometry-msgs \
-    ros-humble-depthai-ros-driver-v3 && \
+    ros-humble-depthai-ros-driver-v3 \
+    ros-humble-gazebo-ros-pkgs && \
     rm -rf /var/lib/apt/lists/*
 
 # Create user with specified UID and GID, add to plugdev group
@@ -59,5 +60,6 @@ RUN groupadd --gid $USER_GID $USERNAME && \
 USER $USERNAME
 RUN pip install --user --upgrade numpy==1.26.2 
 
-# Source ROS in the user environment
-RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc 
+# Source ROS and Gazebo in the user environment
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "source /usr/share/gazebo/setup.bash" >> ~/.bashrc

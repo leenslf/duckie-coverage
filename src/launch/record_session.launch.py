@@ -7,23 +7,6 @@
 
 
 # def generate_launch_description():
-#     apriltag_launch = IncludeLaunchDescription(
-#         PythonLaunchDescriptionSource(
-#             os.path.join(
-#                 get_package_share_directory('apriltag_bringup'),
-#                 'launch', 'apriltag.launch.py'
-#             )
-#         )
-#     )
-
-#     ground_truth_launch = IncludeLaunchDescription(
-#         PythonLaunchDescriptionSource(
-#             os.path.join(
-#                 get_package_share_directory('ground_truth_publisher'),
-#                 'launch', 'ground_truth_publisher.launch.py'
-#             )
-#         )
-#     )
 
 #     bags_dir = os.path.join(os.path.dirname(__file__), '..', 'bags')
 #     os.makedirs(bags_dir, exist_ok=True)

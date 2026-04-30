@@ -16,6 +16,7 @@ def generate_launch_description():
                 'family': '36h11',
                 'size': 0.065,
                 'max_hamming': 0,
+                'publish_tf': True,
             }],
         ),
     ])

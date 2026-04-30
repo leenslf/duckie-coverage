@@ -5,8 +5,8 @@ RTAB-Map RGB-D Odometry — OAK-D Pro launch file (ROS 2 Humble).
 What this file starts
 ─────────────────────
   1. static_transform_publisher  base_link → oak_parent_frame  (identity)
-     Completes the TF chain so rtabmap can look up sensor poses relative
-     to the robot base.
+     Optional (publish_static_tf:=true).  Completes the TF chain so rtabmap
+     can look up sensor poses relative to the robot base.
 
   2. rgbd_odometry (rtabmap_ros)
      Visual-inertial odometry using OAK-D Pro RGB + aligned depth + IMU.
@@ -31,6 +31,9 @@ Run
 """
 
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
@@ -39,6 +42,12 @@ def generate_launch_description():
     # ── 1. Static TF: base_link → oak_parent_frame ────────────────────────
     # Identity transform (x y z yaw pitch roll).  Replace with real extrinsics
     # once a proper calibration is available.
+    static_tf_arg = DeclareLaunchArgument(
+        'publish_static_tf',
+        default_value='false',
+        description='Publish the static base_link → oak_parent_frame transform',
+    )
+
     static_tf = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -50,6 +59,7 @@ def generate_launch_description():
             'oak_parent_frame',     # child  frame
         ],
         output='screen',
+        condition=IfCondition(LaunchConfiguration('publish_static_tf')),
     )
 
     # ── 2. RGB-D Odometry node (rtabmap_ros, no SLAM back-end) ────────────
@@ -109,4 +119,4 @@ def generate_launch_description():
         ],
     )
 
-    return LaunchDescription([static_tf, rgbd_odom])
+    return LaunchDescription([static_tf_arg, static_tf, rgbd_odom])

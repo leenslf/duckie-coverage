@@ -29,7 +29,7 @@ OAK-D Pro driver
 **Launch**
 
 ```bash
-ros2 launch vio rtabmap_odom.launch.py
+ros2 launch vio rtabmap_odom.launch.py publish_static_tf:=true
 ```
 
 **What it does**
@@ -122,3 +122,13 @@ Nav2 sees the full chain: `map → odom → base_link`.
 The `base_link → oak_parent_frame` static transform is an identity placeholder
 published by both launch files.  Replace the `x y z yaw pitch roll` arguments
 with the physically measured camera extrinsics before deploying on the robot.
+
+
+## Simulation and Nav2
+
+``` bash 
+  ros2 launch moborobot_robot minimal_gazebo.launch.py
+  rviz2
+  ros2 launch nav_launch nav2_sim.launch.py launch_nav2:=true static_map_odom:=true
+```
+This was tested and it works for simple waypoint navigation. You should be able to set goals in rviz2 and see the robot navigate to them. 
