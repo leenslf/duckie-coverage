@@ -12,3 +12,6 @@ The correct order should be:
 [] 3. obtain pointcloud from OAK-D's stereo matching stream
 
 [] 4. Compile moborobot's driver manager library and test it. 
+
+[] 5. `coverage_server` should be added to `src/nav_launch` and tuned. Take inspiration from messy `src/robot_nav`. Follow [instructions here](docs/coverage.md) to start with setting up coverage. 
+

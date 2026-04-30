@@ -7,7 +7,7 @@
     Nav2 configuration and bringup: nav2_params.yaml and the launch file
     that starts Nav2 nodes for the differential-drive robot.
   </description>
-  <maintainer email=""></maintainer>
+  <maintainer email="leensaid24@gmail.com">Leen Said</maintainer>
   <license>MIT</license>
 
   <exec_depend>rclpy</exec_depend>
