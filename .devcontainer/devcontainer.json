@@ -15,8 +15,10 @@
     "privileged": true,
     "runArgs": [
         "--net=host",
-        "--gpus", "all",
-        "--group-add=dialout"
+        // "--gpus", "all",
+        "--group-add=dialout",
+        "--memory=8g",
+        "--memory-swap=12g"
     ],
     "mounts": [
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
@@ -38,6 +40,6 @@
                 "anthropic.claude-code"
             ]
         }
-    },
+    }
      
 }
