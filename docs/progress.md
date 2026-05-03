@@ -26,4 +26,4 @@
 - Copied working `nav_launch` packge from ig-lio codebase. This package was tested in simulation before. Some changes need to be made to make it work immediately in the sim, like changing `odom_topic` etc.
 
 ### Sunday 03-05-2026 | Hamza
-- Can now view the point cloud from the oak camera check the [documentation](docs/pointcloud_oak_doc.md) to see how to run it and look at some terminal outputs.
+- Can now view the point cloud from the oak camera check the pointcloud_oak_doc.md file in [documentation](docs/) to see how to run it and look at some terminal outputs.
