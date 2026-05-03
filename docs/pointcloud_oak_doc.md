@@ -34,6 +34,17 @@ ros2 run depth_image_proc point_cloud_xyz_node --ros-args \
   -r points:=/oak/points
 ```
 
+TERMINAL 4: TF (camera → robot)
+```
+cd /home/mnt
+source /opt/ros/humble/setup.bash
+source install/setup.bash
+
+ros2 run tf2_ros static_transform_publisher \
+  0.10 0.00 0.50 0 0 0 \
+  base_link oak_rgb_camera_optical_frame
+```
+
 Before running this termnial, to make sure thispointcloud is fed into nav2, make sure the `nav_params_sim.yaml` file is updated as follows:
 ```
 observation_sources: oak_points
@@ -41,7 +52,6 @@ oak_points:
   topic: /oak/points
   data_type: PointCloud2
 ```
-
 
 Terminal 5: Start Nav2
 ```
