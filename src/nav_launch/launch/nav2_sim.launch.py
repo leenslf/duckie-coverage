@@ -30,8 +30,8 @@ def generate_launch_description():
         executable='static_transform_publisher',
         name='static_map_odom_tf',
         arguments=['--x', '0', '--y', '0', '--z', '0',
-           '--roll', '0', '--pitch', '0', '--yaw', '0',
-           '--frame-id', 'map', '--child-frame-id', 'odom'],
+               '--roll', '0', '--pitch', '0', '--yaw', '0',
+               '--frame-id', 'map', '--child-frame-id', 'odom'],
         parameters=[{'use_sim_time': True}],
         condition=IfCondition(static_map_odom)
     )

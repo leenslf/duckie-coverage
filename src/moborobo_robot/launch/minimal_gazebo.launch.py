@@ -51,7 +51,7 @@ def generate_launch_description():
                         'ros2', 'run', 'gazebo_ros', 'spawn_entity.py',
                         '-topic', '/robot_description',
                         '-entity', 'moborobo_robot',
-                        '-x', '0.0', '-y', '0.0', '-z', '0.2'
+                        '-x', '0', '-y', '-5', '-z', '0.2'
                     ],
                     output='screen'
                 )
