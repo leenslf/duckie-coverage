@@ -44,7 +44,8 @@ def generate_launch_description():
                        'behavior_server',
                        'bt_navigator',
                        'waypoint_follower',
-                       'velocity_smoother']
+                       'velocity_smoother',
+                       'coverage_server']
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
@@ -149,7 +150,7 @@ def generate_launch_description():
                 arguments=['--ros-args', '--log-level', log_level],
                 remappings=remappings),
             Node(
-                package='nav2_bt_navigator',
+                package='backported_bt_navigator',
                 executable='bt_navigator',
                 name='bt_navigator',
                 output='screen',
@@ -162,6 +163,16 @@ def generate_launch_description():
                 package='nav2_waypoint_follower',
                 executable='waypoint_follower',
                 name='waypoint_follower',
+                output='screen',
+                respawn=use_respawn,
+                respawn_delay=2.0,
+                parameters=[configured_params],
+                arguments=['--ros-args', '--log-level', log_level],
+                remappings=remappings),
+            Node(
+                package='opennav_coverage',
+                executable='opennav_coverage',
+                name='coverage_server',
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
@@ -220,8 +231,8 @@ def generate_launch_description():
                 parameters=[configured_params],
                 remappings=remappings),
             ComposableNode(
-                package='nav2_bt_navigator',
-                plugin='nav2_bt_navigator::BtNavigator',
+                package='backported_bt_navigator',
+                plugin='backported_bt_navigator::BtNavigator',
                 name='bt_navigator',
                 parameters=[configured_params],
                 remappings=remappings),
@@ -231,6 +242,8 @@ def generate_launch_description():
                 name='waypoint_follower',
                 parameters=[configured_params],
                 remappings=remappings),
+            # Note: coverage_server does not support composition mode
+            # It will need to be added as a separate non-composable node if composition is enabled
             ComposableNode(
                 package='nav2_velocity_smoother',
                 plugin='nav2_velocity_smoother::VelocitySmoother',
@@ -247,6 +260,16 @@ def generate_launch_description():
                              'node_names': lifecycle_nodes}]),
         ],
     )
+    
+    # After load_composable_nodes, add a conditional standalone node:
+    Node(
+        package='opennav_coverage',
+        executable='opennav_coverage',
+        name='coverage_server',
+        output='screen',
+        condition=IfCondition(use_composition),  # runs alongside composable nodes
+        parameters=[configured_params],
+        remappings=remappings),
 
     # Create the launch description and populate
     ld = LaunchDescription()

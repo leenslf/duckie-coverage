@@ -36,9 +36,9 @@ class CoverageTester(Node):
         
         # these are optional things we can show at the demo, we will add this implemetation in voverage_state
         # # State control service clients
-        # self.start_planning_client = self.create_client(Trigger, '/start_planning')
-        # self.start_cleaning_client = self.create_client(Trigger, '/start_cleaning')
-        # self.stop_client = self.create_client(Trigger, '/stop')
+        self.start_planning_client = self.create_client(Trigger, '/start_planning')
+        self.start_cleaning_client = self.create_client(Trigger, '/start_cleaning')
+        self.stop_client = self.create_client(Trigger, '/stop')
         
         # # Progress publisher (for state machine to track percentage)
         # self.progress_publisher = self.create_publisher(Float32, 'coverage_distance_remaining', 10)
