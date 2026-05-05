@@ -48,6 +48,12 @@ def generate_launch_description():
         description='Publish the static base_link → oak_parent_frame transform',
     )
 
+    use_sim_time_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation time — set true when replaying a bag',
+    )
+
     static_tf = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -103,6 +109,8 @@ def generate_launch_description():
             # 0 = Frame-to-Map (F2M): re-localises each frame against a local
             # map of key-points; more robust than frame-to-frame for slow motion.
             'Odom/Strategy': '0',
+
+            'use_sim_time': LaunchConfiguration('use_sim_time'),
         }],
         remappings=[
             # Node's internal name        →  actual ROS topic (driver output)
@@ -119,4 +127,4 @@ def generate_launch_description():
         ],
     )
 
-    return LaunchDescription([static_tf_arg, static_tf, rgbd_odom])
+    return LaunchDescription([use_sim_time_arg, static_tf_arg, static_tf, rgbd_odom])
