@@ -127,7 +127,7 @@ with the physically measured camera extrinsics before deploying on the robot.
 ## Simulation and Nav2
 
 ``` bash 
-  ros2 launch moborobot_robot minimal_gazebo.launch.py
+  ros2 launch moborobo_robot minimal_gazebo.launch.py
   rviz2
   ros2 launch nav_launch nav2_sim.launch.py launch_nav2:=true static_map_odom:=true
 ```
