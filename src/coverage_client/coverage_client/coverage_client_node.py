@@ -7,12 +7,15 @@ from rclpy.node import Node
 from geometry_msgs.msg import Point32, Polygon
 from opennav_coverage_msgs.action import NavigateCompleteCoverage
 
-# Edit these points to define the field boundary (metres, map frame).
+# 4x4 m square centred near the robot spawn at (0.67, -0.01).
+# Robot must be clearly inside the polygon; previous polygon had the robot
+# at y=-0.01 which is outside the y=0.0 boundary, causing goal rejection.
 FIELD_POLYGON = [
-    [0.0, 0.0],
-    [10.0, 0.0],
-    [10.0, 10.0],
-    [0.0, 10.0],
+    [-1.0, -2.0],
+    [ 3.0, -2.0],
+    [ 3.0,  2.0],
+    [-1.0,  2.0],
+    [-1.0, -2.0],  # close the ring (GML requirement)
 ]
 
 

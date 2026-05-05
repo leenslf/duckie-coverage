@@ -22,5 +22,8 @@
 - removed `ground_truth_publisher` package and `scripts/evaluate.py`. Simpler approach might be used to benchmark. `src/launch/record_session.launch.py` only starts bag recording. 
 
 ### Thursday 30-04-2026 | Leen 
-- Copied `moborobo_robot` package from ig-lio codebase. We can use odom produced by `libgazebo_ros_diff_drive.so` plugin in the simulation for now. We can use existing lidar to mock depth sensor. In reality odom will be obtained from OAK's VIO and depth will obtained from stero matching stream. Camera should be added to the TF tree. Check [to-do](docs/TODO.md).
+- Copied `moborobo_robot` package from ig-lio codebase. We can use odom produced by `libgazebo_ros_diff_drive.so` plugin in the simulation for now. We can use existing lidar to mock depth sensor. In reality odom will be obtained from OAK's VIO and depth will obtained from stero matching stream. Camera should be added to the TF tree. Check [to-do](TODO.md).
 - Copied working `nav_launch` packge from ig-lio codebase. This package was tested in simulation before. Some changes need to be made to make it work immediately in the sim, like changing `odom_topic` etc.
+
+### Tuesday 05-05-2026 | Leen 
+- Cherry picked some code from `feature/coverage-server` @ `nav_launch` and added cleaner client @ `coverage_client`. 

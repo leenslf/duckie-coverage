@@ -31,8 +31,11 @@ bt_navigator:
     # odom_topic: /odometry/filtered # alternative
     use_sim_time: True
     bond_heartbeat_period: 0.2
-    # Coverage navigator configuration
-    navigators: ['navigate_complete_coverage']
+    navigators: ['navigate_to_pose', 'navigate_through_poses', 'navigate_complete_coverage']
+    navigate_to_pose:
+      plugin: "backported_bt_navigator/NavigateToPoseNavigator"
+    navigate_through_poses:
+      plugin: "backported_bt_navigator/NavigateThroughPosesNavigator"
     navigate_complete_coverage:
       plugin: "opennav_coverage_navigator/CoverageNavigator"
     error_code_names: ["compute_path_error_code", "follow_path_error_code", "compute_coverage_error_code"]
