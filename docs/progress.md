@@ -27,3 +27,6 @@
 
 ### Sunday 03-05-2026 | Hamza
 - Can now view the point cloud from the oak camera check the [documentation](pointcloud_oak_doc.md) to see how to run it and look at some terminal outputs.
+
+### Wednesday 06-05-2026 | Leen
+- Recorded some bag data. Added some tools under `src/launch` to easily help record and analyze this data. However the experiments I recorded weren't exactly controlled. 
