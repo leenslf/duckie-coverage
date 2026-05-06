@@ -32,3 +32,7 @@
 ### Wednesday 06-05-2026 | Leen
 - Recorded some bag data. Added some tools under `src/launch` to easily help record and analyze this data. However the experiments I recorded weren't exactly controlled. 
 - Added `/map` to `global_costmap` in nav2 params.
+
+### Wednesday 07-05-2026 | Leen
+- Added `cmd_vel_to_wheels` node (`nav_launch/nav_launch/cmd_vel_to_wheels.py`) to translate Nav2's `/cmd_vel` (`geometry_msgs/TwistStamped`) into left/right wheel speeds on `/wheel_cmd` (`nav_launch/MotorSpeedCommand`) using differential-drive inverse kinematics.
+- Added `nav_launch/launch/cmd_vel_bridge.launch.py` to launch the above node with a configurable `wheel_base` parameter (default 0.3 m).
