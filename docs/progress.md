@@ -30,3 +30,4 @@
 
 ### Wednesday 06-05-2026 | Leen
 - Recorded some bag data. Added some tools under `src/launch` to easily help record and analyze this data. However the experiments I recorded weren't exactly controlled. 
+- Added `/map` to `global_costmap` in nav2 params.
