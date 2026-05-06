@@ -9,9 +9,9 @@ The correct order should be:
     - There needs to be a tf from baselink to OAK parent frame, this depends on task 1, with that being done the tf tree's camera link should refer to OAK-D sensor. LIDAR link should be dropped because we don't use lidar for this project. 
     
 
-[] 3. obtain pointcloud from OAK-D's stereo matching stream
+[x] 3. obtain pointcloud from OAK-D's stereo matching stream
 
 [] 4. Compile moborobot's driver manager library and test it. 
 
-[] 5. `coverage_server` should be added to `src/nav_launch` and tuned. Take inspiration from messy `src/robot_nav`. Follow [instructions here](docs/coverage.md) to start with setting up coverage. 
+[x] 5. `coverage_server` should be added to `src/nav_launch` and tuned. Take inspiration from messy `src/robot_nav`. Follow [instructions here](docs/coverage.md) to start with setting up coverage. 
 
