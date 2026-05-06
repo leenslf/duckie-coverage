@@ -20,6 +20,9 @@
 
 - Status:
 
-        [] The `/oak/stereo/image_raw topic` gives 16-bit depth at 640×400. Convert this to a 2D LaserScan (using depthimage_to_laserscan) or pass the raw depth image directly to Nav2's depth_layer plugin.
+        [x] The `/oak/stereo/image_raw topic` gives 16-bit depth at 640×400. Convert this to a 2D LaserScan (using depthimage_to_laserscan) or pass the raw depth image directly to Nav2's depth_layer plugin.
 
 - Hidden assumption here: The OAK-D's depth has a minimum range (roughly 200–400 mm). Objects closer than that won't appear. We should factor this into our robot's inflation radius settings in the costmap (`nav2_params.yaml`).
+
+## Nav2 config
+- [x] map_topic: `/map` # produced by RTAB-Map node can be used in `global_costmap`. Use depth feed for `local_costmap`. 
