@@ -39,6 +39,18 @@ def generate_launch_description():
         description='Launch RViz2 for visualisation',
     )
 
+    use_sim_time_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation time — set true when replaying a bag',
+    )
+
+    publish_static_tf_arg = DeclareLaunchArgument(
+        'publish_static_tf',
+        default_value='false',
+        description='Publish the static base_link → oak_parent_frame transform',
+    )
+
     # ── 1. Static TF: base_link → oak_parent_frame ─────────────────────────
     # Identity transform (x y z yaw pitch roll).
     # PLACEHOLDER — replace with real extrinsics before deploying on robot.
@@ -53,6 +65,7 @@ def generate_launch_description():
             'oak_parent_frame', # child frame
         ],
         output='screen',
+        condition=IfCondition(LaunchConfiguration('publish_static_tf')),
     )
 
     # ── 2. RTAB-Map SLAM back-end ──────────────────────────────────────────
@@ -90,6 +103,8 @@ def generate_launch_description():
             # Occupancy grid (Nav2) ───────────────────────────────────────
             # Build a 2-D occupancy grid from depth data (sensor type 1).
             'Grid/Sensor': '1',
+
+            'use_sim_time': LaunchConfiguration('use_sim_time'),
         }],
         remappings=[
             # Node's internal name         → actual ROS topic
@@ -115,7 +130,9 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        use_sim_time_arg,
         use_rviz_arg,
+        publish_static_tf_arg,
         static_tf,
         rtabmap_slam,
         rviz,
