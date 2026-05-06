@@ -1,4 +1,4 @@
-{
+git {
     "name": "ROS2 Development Environment",
     "build": {
         "dockerfile": "Dockerfile",
@@ -15,7 +15,6 @@
     "privileged": true,
     "runArgs": [
         "--net=host",
-        "--gpus", "all",
         "--group-add=dialout"
     ],
     "mounts": [
