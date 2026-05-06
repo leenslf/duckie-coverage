@@ -25,5 +25,12 @@
 - Copied `moborobo_robot` package from ig-lio codebase. We can use odom produced by `libgazebo_ros_diff_drive.so` plugin in the simulation for now. We can use existing lidar to mock depth sensor. In reality odom will be obtained from OAK's VIO and depth will obtained from stero matching stream. Camera should be added to the TF tree. Check [to-do](TODO.md).
 - Copied working `nav_launch` packge from ig-lio codebase. This package was tested in simulation before. Some changes need to be made to make it work immediately in the sim, like changing `odom_topic` etc.
 
+### Sunday 03-05-2026 | Hamza
+- Can now view the point cloud from the oak camera check the [documentation](pointcloud_oak_doc.md) to see how to run it and look at some terminal outputs.
+
 ### Tuesday 05-05-2026 | Leen 
 - Cherry picked some code from `feature/coverage-server` @ `nav_launch` and added cleaner client @ `coverage_client`. 
+
+### Wednesday 06-05-2026 | Leen
+- Recorded some bag data. Added some tools under `src/launch` to easily help record and analyze this data. However the experiments I recorded weren't exactly controlled. 
+- Added `/map` to `global_costmap` in nav2 params.
