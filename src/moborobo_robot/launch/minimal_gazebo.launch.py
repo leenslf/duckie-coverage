@@ -12,7 +12,7 @@ def generate_launch_description():
 
     # World file argument — defaults to gravel.world, overridable via CLI:
     #   ros2 launch moborobo_robot minimal_gazebo.launch.py world_file:=/path/to/other.world
-    default_world = os.path.join(pkg_moborobo_robot, 'world', 'gravel.world')
+    default_world = os.path.join(pkg_moborobo_robot, 'world', 'gravel_featureless.world')
     world_file_arg = DeclareLaunchArgument(
         'world_file',
         default_value=default_world,
@@ -51,7 +51,7 @@ def generate_launch_description():
                         'ros2', 'run', 'gazebo_ros', 'spawn_entity.py',
                         '-topic', '/robot_description',
                         '-entity', 'moborobo_robot',
-                        '-x', '0', '-y', '-5', '-z', '0.2'
+                        '-x', '2.7', '-y', '-2.5', '-z', '0.2', '-Y', '-1.5708'
                     ],
                     output='screen'
                 )

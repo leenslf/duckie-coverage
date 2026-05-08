@@ -186,14 +186,42 @@
 
   <!-- Gazebo materials -->
   <gazebo reference="back_left_caster"><material>Gazebo/White</material></gazebo>
-  <gazebo reference="back_left_caster_wheel"><material>Gazebo/Black</material></gazebo>
+  <gazebo reference="back_left_caster_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
   <gazebo reference="back_right_caster"><material>Gazebo/White</material></gazebo>
-  <gazebo reference="back_right_caster_wheel"><material>Gazebo/Black</material></gazebo>
+  <gazebo reference="back_right_caster_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
   <gazebo reference="front_left_caster"><material>Gazebo/White</material></gazebo>
-  <gazebo reference="front_left_caster_wheel"><material>Gazebo/Black</material></gazebo>
+  <gazebo reference="front_left_caster_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
   <gazebo reference="front_right_caster"><material>Gazebo/White</material></gazebo>
-  <gazebo reference="front_right_caster_wheel"><material>Gazebo/Black</material></gazebo>
-  <gazebo reference="left_wheel"><material>Gazebo/Black</material></gazebo>
-  <gazebo reference="right_wheel"><material>Gazebo/Black</material></gazebo>
+  <gazebo reference="front_right_caster_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
 
 </robot>
