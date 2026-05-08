@@ -14,7 +14,7 @@ coverage_server:
     default_allow_overlap: true
 
     default_swath_angle_type: "SET_ANGLE"
-    default_swath_angle: 1.57
+    default_swath_angle: 0.0
     default_swath_type: "LENGTH"
 
     default_path_type: "REEDS_SHEPP"
@@ -125,7 +125,7 @@ local_costmap:
       height: 5 # m
       width: 5 # m
       origin_x: 0.0 # m
-      origin_y: 0.0 # m
+      origin_y: -2.5 # m
       resolution: 0.05 # m
 
       # robot_radius: 0.3

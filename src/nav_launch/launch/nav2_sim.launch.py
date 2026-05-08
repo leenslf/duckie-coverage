@@ -29,7 +29,7 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_map_odom_tf',
-        arguments=['--x', '0', '--y', '0', '--z', '0',
+        arguments=['--x', '2.7', '--y', '-2.5', '--z', '0',
                '--roll', '0', '--pitch', '0', '--yaw', '0',
                '--frame-id', 'map', '--child-frame-id', 'odom'],
         parameters=[{'use_sim_time': True}],
