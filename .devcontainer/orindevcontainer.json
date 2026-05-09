@@ -2,26 +2,32 @@
     "name": "ROS2 Development Environment",
     "build": {
         "dockerfile": "Dockerfile",
-        "context": ".."
+        "context": "..",
+        "args": {},
+        "options": ["--network=host"]
     },
     "containerEnv": {
         "DISPLAY": "${env:DISPLAY}",
         "NVIDIA_VISIBLE_DEVICES": "all",
         "NVIDIA_DRIVER_CAPABILITIES": "all",
-        "ROS_DOMAIN_ID": "50"
+        "ROS_DOMAIN_ID": "50",
+        "LD_LIBRARY_PATH": "/usr/local/zed/lib",
+        "PATH": "${env:PATH}:/usr/local/zed/tools"
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/home/mnt,type=bind,consistency=cached",
     "workspaceFolder": "/home/mnt",
     "privileged": true,
     "runArgs": [
         "--net=host",
-        "--gpus", "all",
+        "--runtime=nvidia",
         "--group-add=dialout"
     ],
     "mounts": [
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-        "source=/dev,target=/dev,type=bind,consistency=cached"
+        "source=/dev,target=/dev,type=bind,consistency=cached",
+        "source=/usr/local/zed,target=/usr/local/zed,type=bind,consistency=cached"
     ],
+    "postCreateCommand": "cd /home/mnt && colcon build --symlink-install",
     "otherPortsAttributes": {
         "onAutoForward": "ignore"
     },
@@ -38,6 +44,6 @@
                 "anthropic.claude-code"
             ]
         }
-    }
+    },
      
 }
