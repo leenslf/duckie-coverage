@@ -33,6 +33,15 @@
 - Recorded some bag data. Added some tools under `src/launch` to easily help record and analyze this data. However the experiments I recorded weren't exactly controlled. 
 - Added `/map` to `global_costmap` in nav2 params.
 
+### Tuesday 06-05-2026 | Leen
+- Extended all launch files to support both OAK-D Pro and ZED cameras via a `camera_type` argument (`oak` or `zed`, default `oak`). No existing OAK behaviour was changed.
+- `record_session.launch.py`: conditionally launches `depthai_ros_driver_v3` (OAK) or `zed_wrapper` (ZED). The `depth_image_proc/point_cloud_xyz_node` is only started for OAK — ZED publishes its own point cloud. The static TF child frame defaults to `oak_parent_frame` for OAK and `zed_camera_link` for ZED, overridable via `camera_parent_frame`. Added a `zed_camera_model` arg (default `zed2`).
+- `record_bag.launch.py`: selects the correct topic list based on `camera_type`. OAK records `/oak/*` topics; ZED records `/zed/zed_node/*` equivalents.
+- `vio/rtabmap_odom.launch.py`: selects OAK or ZED topic remappings. The three OAK quirk parameters (`Imu/IgnoreAccCovariance`, `Imu/IgnoreGyroCovariance`, `subscribe_imu_orientation=False`) are only applied for OAK; ZED gets valid covariances and IMU orientation enabled.
+- `slam/rtabmap_slam.launch.py`: same remapping and `subscribe_imu_orientation` switch as above.
+- `apriltag_bringup/apriltag.launch.py`: remaps `image_rect` and `camera_info` to the appropriate topics for the selected camera.
+- All five files now use `OpaqueFunction` to evaluate `camera_type` at launch time, keeping the logic readable without duplicating node definitions.
+
 ### Wednesday 07-05-2026 | Leen
 - Added `cmd_vel_to_wheels` node (`nav_launch/nav_launch/cmd_vel_to_wheels.py`) to translate Nav2's `/cmd_vel` (`geometry_msgs/TwistStamped`) into left/right wheel speeds on `/wheel_cmd` (`nav_launch/MotorSpeedCommand`) using differential-drive inverse kinematics.
 - Added `nav_launch/launch/cmd_vel_bridge.launch.py` to launch the above node with a configurable `wheel_base` parameter (default 0.3 m).
