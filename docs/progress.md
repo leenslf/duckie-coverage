@@ -36,3 +36,8 @@
 ### Wednesday 07-05-2026 | Leen
 - Added `cmd_vel_to_wheels` node (`nav_launch/nav_launch/cmd_vel_to_wheels.py`) to translate Nav2's `/cmd_vel` (`geometry_msgs/TwistStamped`) into left/right wheel speeds on `/wheel_cmd` (`nav_launch/MotorSpeedCommand`) using differential-drive inverse kinematics.
 - Added `nav_launch/launch/cmd_vel_bridge.launch.py` to launch the above node with a configurable `wheel_base` parameter (default 0.3 m).
+
+### Friday 09-05-2026 | Leen
+- Migrated `kinematics` package from ROS1 (copied from previous group's codebase) to ROS2. Both `kinematics_node` (cmd_vel → motor RPM) and `inverse_kinematics_node` (motor RPM → odom + TF).
+- Consolidated `robot_msgs`, `roboteq_driver`, and `kinematics` under `src/drive/`.
+- Added `drive_bringup` package with `drive.launch.py` to launch the full drive pipeline in one command: `ros2 launch drive_bringup drive.launch.py`.
