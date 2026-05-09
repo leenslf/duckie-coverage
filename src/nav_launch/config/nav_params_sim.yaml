@@ -158,14 +158,14 @@
         robot_base_frame: base_footprint
         robot_radius: 0.22
         resolution: 0.05
-        plugins: ["static_layer", "obstacle_layer", "denoise_layer", "inflation_layer"]
+        plugins: ["obstacle_layer", "denoise_layer", "inflation_layer"]
 
-        static_layer:
-          plugin: "nav2_costmap_2d::StaticLayer"
-          enabled: True
-          map_topic: /map  # produced by RTAB-Map
-          subscribe_to_updates: True
-          map_subscribe_transient_local: True
+        # static_layer:
+        #   plugin: "nav2_costmap_2d::StaticLayer"
+        #   enabled: True
+        #   map_topic: /map  # produced by RTAB-Map
+        #   subscribe_to_updates: True
+        #   map_subscribe_transient_local: True
 
         obstacle_layer:
           plugin: "nav2_costmap_2d::ObstacleLayer"
