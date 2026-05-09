@@ -145,11 +145,15 @@ def main():
     navigator = CoverageNavigatorTester()
     navigator.startup()
 
-    # Field sized to avoid gravel.world obstacles:
-    #   small_box_1 (3,-2.5) and small_box_2 (2.5,-2): north boundary at -2.5, east at 2.5
-    #   dynamic_box (-1.5,-1.5): north boundary at -2.5 keeps it out
-    #   south wall at y=-8: south boundary at -6.5 gives 1.5m clearance for Dubins turns
-    field = [[0.5, -6.5], [0.5, -2.5], [5.5, -2.5], [5.5, -6.5], [0.5, -6.5]]
+    # Field in map frame (= Gazebo world frame, map→odom TF is identity).
+    # Walls: west x=0, east x=9, north y=-2.8, south y=-8.0
+    # Field must be entirely south of north wall (y < -2.8) and north of south wall (y > -8.0).
+    # x∈[1.45, 7.45]: 6m wide, gives ~1.4m clearance from east/west walls for E-W headland turns.
+    # y∈[-7.4, -3.3]: 4.1m tall, fits within walls with ~0.5m margin at N and S.
+    # headland=0.85m → swath area x∈[2.3,6.6], y∈[-6.55,-4.15].
+    # First coverage row (northernmost) starts at (2.3, -4.4) — robot spawns at (2.3,-3.5)
+    # and drives ~0.9m south through the north headland to reach row start.
+    field = [[1.45, -7.4], [1.45, -3.3], [7.45, -3.3], [7.45, -7.4], [1.45, -7.4]]
     navigator.navigateCoverage(field)
 
     i = 0

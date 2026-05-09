@@ -29,7 +29,7 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_map_odom_tf',
-        arguments=['--x', '2.7', '--y', '-2.5', '--z', '0',
+        arguments=['--x', '0', '--y', '0', '--z', '0',
                '--roll', '0', '--pitch', '0', '--yaw', '0',
                '--frame-id', 'map', '--child-frame-id', 'odom'],
         parameters=[{'use_sim_time': True}],
@@ -48,13 +48,22 @@ def generate_launch_description():
         )
 
     nav2 = TimerAction(
-        period=3.0,
+        period=10.0,
         actions=[nav2_launch]
+    )
+
+    ground_truth_odom = Node(
+        package='moborobo_robot',
+        executable='ground_truth_odom',
+        name='ground_truth_odom',
+        output='screen',
+        parameters=[{'use_sim_time': True}]
     )
 
     return LaunchDescription([
         launch_nav2_declaration,
         static_map_odom_declaration,
         map_odom_tf,
+        ground_truth_odom,
         nav2
     ])

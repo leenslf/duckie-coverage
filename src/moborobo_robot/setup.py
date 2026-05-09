@@ -28,6 +28,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'ground_truth_odom = moborobo_robot.ground_truth_odom:main',
         ],
     },
 )

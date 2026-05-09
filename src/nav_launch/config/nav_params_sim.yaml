@@ -117,8 +117,8 @@ local_costmap:
       footprint: "[[0.35, 0.235], [0.35, -0.235], [-0.35, -0.235], [-0.35, 0.235]]"
       height: 15 # m
       width: 15 # m
-      origin_x: 0.0 # m
-      origin_y: 0.0 # m
+      origin_x: 2.3 # m
+      origin_y: -3.5 # m
       resolution: 0.1 # m
 
       robot_radius: 0.42
