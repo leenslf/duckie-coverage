@@ -48,19 +48,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-tf2-geometry-msgs \
     ros-humble-depthai-ros-driver-v3 && \
     rm -rf /var/lib/apt/lists/*
-
-# ZED ROS2 wrapper — SDK itself is bind-mounted from the host at /usr/local/zed
-RUN wget -q https://download.stereolabs.com/zedsdk/ros/keys/zed.gpg -O - | \
-        gpg --dearmor | tee /usr/share/keyrings/zed-keyring.gpg > /dev/null && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/zed-keyring.gpg] \
-        https://download.stereolabs.com/zedsdk/ros/humble/ubuntu/jammy jammy main" \
-        > /etc/apt/sources.list.d/zed.list && \
-    apt-get update && apt-get install -y --no-install-recommends \
-        ros-humble-zed-ros2-wrapper \
-        ros-humble-zed-msgs \
-        ros-humble-zed-interfaces \
-    && rm -rf /var/lib/apt/lists/*
-
+    
 # Create user with specified UID and GID, add to plugdev group
 RUN groupadd --gid $USER_GID $USERNAME && \
     useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \
