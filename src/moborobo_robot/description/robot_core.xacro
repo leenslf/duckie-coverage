@@ -152,6 +152,19 @@
     </plugin>
   </gazebo> 
 
+  <gazebo>
+    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+      <ros>
+        <remapping>odom:=ground_truth/odom</remapping>
+      </ros>
+      <body_name>base_link</body_name>
+      <frame_name>world</frame_name>
+      <update_rate>50</update_rate>
+      <xyz_offsets>0 0 0</xyz_offsets>
+      <rpy_offsets>0 0 0</rpy_offsets>
+    </plugin>
+  </gazebo>
+
   <!-- Gazebo materials -->
   <gazebo reference="back_left_caster"><material>Gazebo/White</material></gazebo>
   <gazebo reference="back_left_caster_wheel"><material>Gazebo/Black</material></gazebo>
