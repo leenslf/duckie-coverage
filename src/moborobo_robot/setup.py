@@ -29,6 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'ground_truth_odom = moborobo_robot.ground_truth_odom:main',
+            'dynamic_obstacle_mover = moborobo_robot.dynamic_obstacle_mover:main',
         ],
     },
 )

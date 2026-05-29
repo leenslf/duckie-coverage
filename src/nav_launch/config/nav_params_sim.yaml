@@ -14,7 +14,7 @@ coverage_server:
     default_swath_angle_type: "SET_ANGLE"
     default_swath_angle: 1.5708
     default_swath_type: "LENGTH"
-    default_path_type: "DUBIN"
+    default_path_type: "REEDS_SHEPP"
     default_path_continuity_type: "CONTINUOUS"
     goal_dist_tolerance: 0.3
     # default_custom_order: []
@@ -117,15 +117,15 @@ local_costmap:
       footprint: "[[0.35, 0.235], [0.35, -0.235], [-0.35, -0.235], [-0.35, 0.235]]"
       height: 15 # m
       width: 15 # m
-      origin_x: 2.3 # m
-      origin_y: -3.5 # m
+      # origin_x: 2.3 # m
+      # origin_y: -3.5 # m
       resolution: 0.1 # m
 
-      robot_radius: 0.42
+      # robot_radius: 0.42
       rolling_window: True
       lethal_cost_threshold: 200
       track_unknown_space: False # false: unknown space = free space, else unknown space
-      unknown_cost_value: 70 # only valid if tracking
+      # unknown_cost_value: 70 # only valid if tracking
       trinary_costmap: False
 
       publish_frequency: 5.0
@@ -152,9 +152,9 @@ local_costmap:
           inf_is_valid: False
           clearing: True
           marking: True
-          obstacle_max_range: 3.0
+          obstacle_max_range: 1.5
           obstacle_min_range: 0.3
-          raytrace_max_range: 3.5
+          raytrace_max_range: 2.0
           raytrace_min_range: 0.0
 
       denoise_layer:
@@ -249,7 +249,7 @@ controller_server:
     publish_zero_velocity: True
 
     min_x_velocity_threshold: 0.01
-    min_y_velocity_threshold: 0.5
+    # min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.005
     failure_tolerance: -1.0
 
@@ -262,8 +262,8 @@ controller_server:
     goal_checker_plugins: ["general_goal_checker"]
     general_goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.35
-      yaw_goal_tolerance: 6.28
+      xy_goal_tolerance: 0.10
+      yaw_goal_tolerance: 0.5
       stateful: True
 
 
@@ -293,53 +293,6 @@ controller_server:
       max_robot_pose_search_dist: 10.0
       use_interpolation: true
       allow_reversing: false
-
-      decel_lim_x: -2.5
-      acc_lim_x: 2.5
-      decel_lim_y: 0.0
-      acc_lim_y: 0.0
-      decel_lim_theta: -3.2
-      acc_lim_theta: 3.2
-
-      # Trajectory Generation
-      sim_time: 2.0
-      linear_granularity: 0.05
-      angular_granularity: 0.025
-      include_last_point: True
-
-      # Pruning
-      prune_plane: false
-      shorten_transformed_plan: False
-      prune_distance: 0.1
-      forward_prune_distance: 20.0
-      transform_tolerance: 2.0
-      debug_trajectory_details: True
-      short_circuit_trajectory_evaluation: True
-
-      #??
-      xy_goal_tolerance: 0.2
-      trans_stopped_velocity: 0.25
-      stateful: true
-
-      # Critics and Weights
-      critics: ["BaseObstacle", "GoalAlign", "GoalDist", "ObstacleFootprint", "Oscillation", "PathAlign", "PathDist", "RotateToGoal"]
-
-      BaseObstacle.scale: 60.0 # For Path Intersection with Costmap
-      ObstacleFootprint.scale: 60.0 # For Footprint Intersectoin with Costmap
-
-      GoalAlign.scale: 5.0
-      GoalAlign.forward_point_distance: 0.4
-      GoalDist.scale: 5.0
-
-      PathAlign.scale: 10.0
-      PathAlign.forward_point_distance: 0.4
-      PathDist.scale: 10.0
-
-      RotateToGoal.xy_goal_tolerance: 0.5
-      RotateToGoal.trans_stopped_veloctiy: 0.25 # default
-      RotateToGoal.slowing_factor: 5.0          # default
-      RotateToGoal.lookahead_time: -1.0
-      RotateToGoal.scale: 10.0
 
 
 # # Other Stuff Look At Later

@@ -103,15 +103,17 @@ Current setup uses E-W rows (turns at east/west headlands):
 - North/south walls need ≥ 1.5m clearance from the **northernmost/southernmost
   row center** (not the field boundary), because turns don't happen there
 
-### Current World Geometry
+### Current World Geometry (Setup A — baseline)
 ```
-Walls:   west x=−1.0   east x=10.0   north y=−2.8   south y=−8.0
-Field:   x ∈ [1.45, 7.45],  y ∈ [−7.4, −3.3]   (in demo_coverage.py)
-Spawn:   (2.3, −3.5, 0.2)  yaw=−1.5708 (facing south)   (minimal_gazebo.launch.py)
+Walls:   west inner x=−0.1  east inner x=9.0  north inner y=−3.3  south inner y=−8.8
+Field:   x ∈ [1.45, 7.45],  y ∈ [−8.8, −3.3]
+Spawn:   (2.3, −3.5, 0.2)  yaw=−1.5708 (facing south)
 ```
 
-Headland = 0.85m → swath area: x ∈ [2.3, 6.6], y ∈ [−6.55, −4.15]
-First row (northernmost, E-W): y ≈ −4.4, west end at x = 2.3 → matches spawn x.
+Headland = 0.85m → swath x∈[2.3,6.6] y∈[−7.95,−4.15] = 8 E-W rows @ 0.47m
+Row centres (N→S): −4.4, −4.87, −5.34, −5.81, −6.28, −6.75, −7.22, −7.69
+
+See src/docs/coverage_setups.md for Setup B (OEZ) and Setup C (dynamic obstacle) configurations.
 
 ### Recipe for a New World
 1. Place walls, note each center pose (Cx, Cy) and thickness (0.2m)
@@ -131,7 +133,7 @@ First row (northernmost, E-W): y ≈ −4.4, west end at x = 2.3 → matches spa
 | `default_headland_width` | 0.85m | must be ≥ min_turning_radius |
 | `min_turning_radius` | 0.8m | larger = gentler Dubins arc |
 | `default_swath_angle` | 1.5708 (π/2) | produces E-W rows in this setup |
-| `default_path_type` | DUBIN | Dubins curves for headland turns |
+| `default_path_type` | REEDS_SHEPP | Allows reversing; tighter headland turns than Dubins |
 | `obstacle_max_range` | 1.5m | reduced from 3m to avoid wall detection during turns |
 
 `origin_x`/`origin_y` in local costmap: **irrelevant** — `rolling_window: true`

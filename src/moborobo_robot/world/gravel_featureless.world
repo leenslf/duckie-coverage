@@ -27,65 +27,70 @@
       <heading_deg>0.0</heading_deg>
     </spherical_coordinates>
 
-    <!-- Field: x∈[0,5], y∈[-5.5,-0.5] in Gazebo/map frame (map=odom=world, zero TF offset) -->
-    <!-- headland_width=0.85m → turn apices at y=-0.5 (north) and y=-5.5 (south)            -->
-    <!-- Walls placed 2.5m beyond field boundaries → well outside obstacle_max_range=1.5m    -->
+    <!-- Field: x∈[1.45,7.45] y∈[-8.8,-3.3]. Reeds-Shepp turns at E/W ends only.          -->
+    <!-- E/W walls: field_boundary ± 1.55m > obstacle_max_range=1.5m (turn clearance)       -->
+    <!-- N/S walls: inner face = field boundary (robot never reaches N/S boundary, no turns) -->
+    <!-- 8 E-W rows @ 0.47m spacing; swath x∈[2.3,6.6] y∈[-7.95,-4.15]                    -->
 
+    <!-- North wall inner face at y=-3.3 = field_north boundary -->
     <model name="wall_north">
       <static>true</static>
-      <pose>4.5 -2.8 1.0 0 0 0</pose>
+      <pose>4.45 -3.2 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>9.2 0.2 2</size></box></geometry>
+          <geometry><box><size>9.5 0.2 2</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>9.2 0.2 2</size></box></geometry>
+          <geometry><box><size>9.5 0.2 2</size></box></geometry>
         </visual>
       </link>
     </model>
 
+    <!-- South wall inner face at y=-8.8 = field_south boundary -->
     <model name="wall_south">
       <static>true</static>
-      <pose>4.5 -8.0 1.0 0 0 0</pose>
+      <pose>4.45 -8.9 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>9.2 0.2 2</size></box></geometry>
+          <geometry><box><size>9.5 0.2 2</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>9.2 0.2 2</size></box></geometry>
+          <geometry><box><size>9.5 0.2 2</size></box></geometry>
         </visual>
       </link>
     </model>
 
+    <!-- East wall inner face at x=9.0: 1.55m east of field_east=7.45 (turn clearance) -->
     <model name="wall_east">
       <static>true</static>
-      <pose>10.0 -3.0 1.0 0 0 0</pose>
+      <pose>9.1 -6.05 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.2 10.2 2</size></box></geometry>
+          <geometry><box><size>0.2 5.9 2</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.2 10.2 2</size></box></geometry>
+          <geometry><box><size>0.2 5.9 2</size></box></geometry>
         </visual>
       </link>
     </model>
 
+    <!-- West wall inner face at x=-0.1: 1.55m west of field_west=1.45 (turn clearance) -->
     <model name="wall_west">
       <static>true</static>
-      <pose>-1.0 -3.0 1.0 0 0 0</pose>
+      <pose>-0.2 -6.05 1.0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
-          <geometry><box><size>0.2 10.2 2</size></box></geometry>
+          <geometry><box><size>0.2 5.9 2</size></box></geometry>
         </collision>
         <visual name="visual">
-          <geometry><box><size>0.2 10.2 2</size></box></geometry>
+          <geometry><box><size>0.2 5.9 2</size></box></geometry>
         </visual>
       </link>
     </model>
 
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>2.5 -14.0 12.0 0.0 0.8 1.57</pose>
+        <pose frame=''>4.45 -17.0 14.0 0.0 0.8 1.57</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
