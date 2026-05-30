@@ -1,4 +1,4 @@
-git {
+{
     "name": "ROS2 Development Environment",
     "build": {
         "dockerfile": "Dockerfile",
