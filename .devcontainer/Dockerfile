@@ -49,19 +49,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-gazebo-ros-pkgs && \
     rm -rf /var/lib/apt/lists/*
 
-# Uncomment the block below if you are using a ZED camera.
-# The ZED SDK must be installed on the host and bind-mounted into the container.
-#
-# RUN wget -q https://download.stereolabs.com/zedsdk/ros/keys/zed.gpg -O - | \
-#         gpg --dearmor | tee /usr/share/keyrings/zed-keyring.gpg > /dev/null && \
-#     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/zed-keyring.gpg] \
-#         https://download.stereolabs.com/zedsdk/ros/humble/ubuntu/jammy jammy main" \
-#         > /etc/apt/sources.list.d/zed.list && \
-#     apt-get update && apt-get install -y --no-install-recommends \
-#         ros-humble-zed-ros2-wrapper \
-#         ros-humble-zed-msgs \
-#         ros-humble-zed-interfaces \
-#     && rm -rf /var/lib/apt/lists/*
 
 # Create user with specified UID and GID, add to plugdev group
 RUN groupadd --gid $USER_GID $USERNAME && \
