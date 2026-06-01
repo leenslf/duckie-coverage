@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-tf2-geometry-msgs \
     ros-humble-depthai-ros-driver-v3 && \
     rm -rf /var/lib/apt/lists/*
-    
+
 # Create user with specified UID and GID, add to plugdev group
 RUN groupadd --gid $USER_GID $USERNAME && \
     useradd --uid $USER_UID --gid $USER_GID -m $USERNAME && \

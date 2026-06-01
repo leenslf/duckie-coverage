@@ -10,7 +10,8 @@
         "DISPLAY": "${env:DISPLAY}",
         "NVIDIA_VISIBLE_DEVICES": "all",
         "NVIDIA_DRIVER_CAPABILITIES": "all",
-        "ROS_DOMAIN_ID": "50"
+        "ROS_DOMAIN_ID": "50",
+        "PATH": "${env:PATH}"
     },
     "workspaceMount": "source=${localWorkspaceFolder},target=/home/mnt,type=bind,consistency=cached",
     "workspaceFolder": "/home/mnt",
