@@ -26,6 +26,7 @@ Placeholder that must be updated before physical robot deployment
 
 Run
 ───
+    rm ~/.ros/rtabmap.db
   ros2 launch slam rtabmap_slam.launch.py                     # OAK
   ros2 launch slam rtabmap_slam.launch.py camera_type:=zed   # ZED
 """
@@ -70,7 +71,7 @@ def launch_setup(context, *args, **kwargs):
         camera_type,
         LaunchConfiguration('camera_parent_frame').perform(context),
     )
-    use_sim_time = LaunchConfiguration('use_sim_time').perform(context)
+    use_sim_time = LaunchConfiguration('use_sim_time').perform(context).lower() == 'true'
     publish_static_tf = LaunchConfiguration('publish_static_tf').perform(context).lower() == 'true'
     use_rviz = LaunchConfiguration('use_rviz').perform(context).lower() == 'true'
 
@@ -107,7 +108,7 @@ def launch_setup(context, *args, **kwargs):
             'map_frame_id':  'map',
 
             # Input topology ──────────────────────────────────────────────
-            'subscribe_depth':           True,
+            'subscribe_depth':           False,
             'subscribe_odom':            True,
             # OAK orientation field is a dummy identity quaternion;
             # ZED provides a real orientation estimate.
@@ -118,9 +119,34 @@ def launch_setup(context, *args, **kwargs):
             'queue_size':  30,
 
             # SLAM behaviour ──────────────────────────────────────────────
-            'Rtabmap/DetectionRate':   '1',
-            'Mem/IncrementalMemory':   'true',
-            'Mem/InitWMWithAllNodes':  'false',
+            # 0 = process every keyframe (was '1' Hz, which under-sampled short loops)
+            'Rtabmap/DetectionRate':  '0',
+            'Mem/IncrementalMemory':  'true',
+            # Keep all nodes in Working Memory so the Bayesian filter can
+            # score loop-closure hypotheses against the full history.
+            # For maps >1000 nodes consider switching back to 'false' and
+            # raising Rtabmap/TimeThr to control WM size instead.
+            'Mem/InitWMWithAllNodes': 'true',
+            'Mem/STMSize':            '30',
+
+            # Loop closure ────────────────────────────────────────────────
+            'RGBD/LoopClosureEnabled': 'true',
+            # Hypothesis probability threshold (default 0.11).  Lower value
+            # = more sensitive; false-positive risk is low for indoor loops.
+            'Rtabmap/LoopThr':         '0.09',
+            # No time budget: prevent nodes from being evicted from Working
+            # Memory mid-run.  Without this, any iteration > 700 ms causes
+            # the oldest node to leave WM, breaking the Bayesian filter.
+            'Rtabmap/TimeThr':         '0',
+            # Minimum RANSAC inliers for geometric verification; default 20
+            # is too strict in low-texture or compact environments.
+            'Vis/MinInliers':          '12',
+            'Vis/InlierDistance':      '0.1',
+
+            # Feature extraction ──────────────────────────────────────────
+            # More features → stronger vocabulary hypotheses.
+            'Kp/MaxFeatures':      '500',
+            'Kp/DetectorStrategy': '6',   # GFTT+BRIEF
 
             # Occupancy grid (Nav2) ───────────────────────────────────────
             'Grid/Sensor': '1',

@@ -63,7 +63,7 @@ zed_wrapper
 
 ```bash
 # OAK-D Pro (default)
-ros2 launch vio rtabmap_odom.launch.py publish_static_tf:=true
+ros2 launch vio rtabmap_odom.launch.py publish_static_tf:=false
 
 # ZED
 ros2 launch vio rtabmap_odom.launch.py camera_type:=zed publish_static_tf:=true
@@ -111,7 +111,7 @@ These parameters are applied automatically when `camera_type:=oak` and are not s
 # vio must already be running before starting slam
 
 # OAK-D Pro (default)
-ros2 launch slam rtabmap_slam.launch.py
+ros2 launch slam rtabmap_slam.launch.py publish_static_tf:=false
 
 # ZED
 ros2 launch slam rtabmap_slam.launch.py camera_type:=zed
