@@ -24,6 +24,7 @@
 ### Thursday 30-04-2026 | Leen 
 - Copied `moborobo_robot` package from ig-lio codebase. We can use odom produced by `libgazebo_ros_diff_drive.so` plugin in the simulation for now. We can use existing lidar to mock depth sensor. In reality odom will be obtained from OAK's VIO and depth will obtained from stero matching stream. Camera should be added to the TF tree. Check [to-do](docs/TODO.md).
 - Copied working `nav_launch` packge from ig-lio codebase. This package was tested in simulation before. Some changes need to be made to make it work immediately in the sim, like changing `odom_topic` etc.
+- Added `roboteq_driver` package, which is a ROS2 migrated package from previous group's work. Not tested yet.
 
 ### Sunday 03-05-2026 | Hamza
 - Can now view the point cloud from the oak camera check the [documentation](pointcloud_oak_doc.md) to see how to run it and look at some terminal outputs.
@@ -40,3 +41,12 @@
 - `slam/rtabmap_slam.launch.py`: same remapping and `subscribe_imu_orientation` switch as above.
 - `apriltag_bringup/apriltag.launch.py`: remaps `image_rect` and `camera_info` to the appropriate topics for the selected camera.
 - All five files now use `OpaqueFunction` to evaluate `camera_type` at launch time, keeping the logic readable without duplicating node definitions.
+
+### Wednesday 07-05-2026 | Leen
+- Added `cmd_vel_to_wheels` node (`nav_launch/nav_launch/cmd_vel_to_wheels.py`) to translate Nav2's `/cmd_vel` (`geometry_msgs/TwistStamped`) into left/right wheel speeds on `/wheel_cmd` (`nav_launch/MotorSpeedCommand`) using differential-drive inverse kinematics.
+- Added `nav_launch/launch/cmd_vel_bridge.launch.py` to launch the above node with a configurable `wheel_base` parameter (default 0.3 m).
+
+### Friday 09-05-2026 | Leen
+- Migrated `kinematics` package from ROS1 (copied from previous group's codebase) to ROS2. Both `kinematics_node` (cmd_vel → motor RPM) and `inverse_kinematics_node` (motor RPM → odom + TF).
+- Consolidated `robot_msgs`, `roboteq_driver`, and `kinematics` under `src/drive/`.
+- Added `drive_bringup` package with `drive.launch.py` to launch the full drive pipeline in one command: `ros2 launch drive_bringup drive.launch.py`.

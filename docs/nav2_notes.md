@@ -26,3 +26,20 @@
 
 ## Nav2 config
 - [x] map_topic: `/map` # produced by RTAB-Map node can be used in `global_costmap`. Use depth feed for `local_costmap`. 
+
+## cmd_vel → wheel_cmd translation
+Nav2 outputs velocity commands on `/cmd_vel` as `geometry_msgs/TwistStamped`. The Roboteq driver expects per-wheel speeds, so a translation node is needed.
+
+**Node:** `cmd_vel_to_wheels` (`nav_launch/nav_launch/cmd_vel_to_wheels.py`)  
+**Launch:** `nav_launch/launch/cmd_vel_bridge.launch.py`
+
+Inverse kinematics (differential drive):
+```
+left  = linear.x - (angular.z * wheel_base / 2.0)
+right = linear.x + (angular.z * wheel_base / 2.0)
+```
+
+- Subscribes: `/cmd_vel` (`geometry_msgs/TwistStamped`)
+- Publishes: `/wheel_cmd` (`nav_launch/MotorSpeedCommand` — header, left, right)
+- Parameter: `wheel_base` (float, default `0.3` m) — override at launch with `wheel_base:=0.35`
+- Header (stamp + frame_id) is forwarded from the incoming message.
