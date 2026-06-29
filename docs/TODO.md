@@ -1,7 +1,7 @@
 ## Finished tasks [] → [x]
-[] 1. mount the camera on the robot
+[x] 1. mount the camera on the robot
 
-[] 2. if moborobot is to be used, the tf tree should be edited to include the camera. Check the current [tf tree](src/moborobo_robot/data/frames_2026-04-30_09.27.53.pdf). Currently RTAB-Map Odom node publishes a static tf base_link → oak_parent_frame. 
+[x] 2. if moborobot is to be used, the tf tree should be edited to include the camera. Check the current [tf tree](src/moborobo_robot/data/frames_2026-04-30_09.27.53.pdf). Currently RTAB-Map Odom node publishes a static tf base_link → oak_parent_frame. 
 The correct order should be:
      
     - map → odom (publish by RTAB-Map SLAM node)
@@ -11,7 +11,8 @@ The correct order should be:
 
 [x] 3. obtain pointcloud from OAK-D's stereo matching stream
 
-[] 4. Compile moborobot's driver manager library and test it. 
+[x] 4. Compile moborobot's driver manager library and test it. 
 
 [x] 5. `coverage_server` should be added to `src/nav_launch` and tuned. Take inspiration from messy `src/robot_nav`. Follow [instructions here](docs/coverage.md) to start with setting up coverage. 
 
+[] 6. This codebase was tested with simulated ZED camera, the real ZED camera wasn't tested due to set up issues (container, environment, etc). Work was resumed using OAK-D. 

@@ -94,9 +94,20 @@ The node runs at **100 Hz**. Each cycle it:
 | 7 | Green button (joystick enable) |
 
 
-## Known Limitations
+# How we use it in this project
 
-- **No command timeout** — if `/motor_commands` stops publishing, the last received command continues to be sent until the safety button is pressed.
-- **Pre-compiled object file** — `RoboteqDevice.o` is linked as a binary, which may cause issues when cross-compiling for a different architecture.
-- **Hardcoded serial port** — the device path `/dev/ttyACM0` is hardcoded in `driver.h`. If the USB port enumeration changes, the driver will fail to connect.
-- **Specific Roboteq model unknown** — the code uses the generic Roboteq SDK which covers their entire product line. The exact controller model is not documented.
+Once the container is up and running on the orin, on any computer on the same network runnign ros2:
+1. Set ROS Domain ID, we use `ROS_DOMAIN_ID=50` in this container. 
+    ``` bash
+    export ROS_DOMAIN_ID=50
+    ```
+2. Start teleop keyboard to publish cmd-vel topic
+
+    ``` bash
+    ros2 run teleop_twist_keyboard teleop_twist_keyboard
+    ```
+3. Start the ROS2 driver controller
+    ``` bash
+    ros2 launch drive_bringup drive.launch.py
+    ```
+You should be able to observe the robot move when you play with the teleop keyboard. Adjust the speed accordingly. 

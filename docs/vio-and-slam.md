@@ -1,10 +1,3 @@
-# Duckiebot DM21 — ROS 2 Packages
-
-This directory contains the ROS 2 packages for the robot.
-The perception pipeline supports **OAK-D Pro** and **ZED** cameras and is split into
-two stages that must be launched in order.
-
----
 
 ## Camera support
 
@@ -165,33 +158,3 @@ Also publishes a 2-D occupancy grid for Nav2.
 
 Nav2 sees the full chain: `map → odom → base_link`.
 
----
-
-## Placeholder before physical deployment
-
-Both launch files publish a static `base_link → <camera_parent_frame>` identity
-transform as a placeholder.  The frame name defaults to `oak_parent_frame` for OAK
-and `zed_camera_link` for ZED.  Replace the `x y z yaw pitch roll` arguments with
-the physically measured camera extrinsics before deploying on the robot.
-
-The frame can be overridden explicitly:
-
-```bash
-ros2 launch vio rtabmap_odom.launch.py \
-  camera_type:=zed \
-  camera_parent_frame:=zed_camera_link \
-  publish_static_tf:=true
-```
-
----
-
-## Simulation and Nav2
-
-```bash
-ros2 launch moborobot_robot minimal_gazebo.launch.py
-rviz2
-ros2 launch nav_launch nav2_sim.launch.py launch_nav2:=true static_map_odom:=true
-```
-
-This was tested and works for simple waypoint navigation.
-Set goals in RViz2 and the robot will navigate to them.

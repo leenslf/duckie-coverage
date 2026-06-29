@@ -43,3 +43,16 @@ right = linear.x + (angular.z * wheel_base / 2.0)
 - Publishes: `/wheel_cmd` (`nav_launch/MotorSpeedCommand` — header, left, right)
 - Parameter: `wheel_base` (float, default `0.3` m) — override at launch with `wheel_base:=0.35`
 - Header (stamp + frame_id) is forwarded from the incoming message.
+
+## Using it 
+```bash
+# launch the sim 
+ros2 launch moborobot_robot minimal_gazebo.launch.py
+# launch rviz 
+rviz2
+# launch nav2, static_map_odom:=true publish static 0 0 0 tf link between map and odom when slam is not on. It's suggested you follow the documentation at vio-and-slam.md first
+ros2 launch nav_launch nav2_sim.launch.py launch_nav2:=true 
+```
+
+This was tested and works for simple waypoint navigation.
+Set goals in RViz2 and the robot will navigate to them.
