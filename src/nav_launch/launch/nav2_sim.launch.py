@@ -4,6 +4,7 @@ from launch.actions import IncludeLaunchDescription, TimerAction, DeclareLaunchA
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
+from launch_ros.parameter_descriptions import ParameterValue
 from ament_index_python.packages import get_package_share_directory
 import os
 
@@ -25,12 +26,20 @@ def generate_launch_description():
     )
     static_map_odom = LaunchConfiguration("static_map_odom")
 
+    use_sim_time_declaration = DeclareLaunchArgument(
+        "use_sim_time",
+        default_value="true",
+        description='use simulation time if true'
+    )
+    use_sim_time = LaunchConfiguration("use_sim_time")
+    use_sim_time_param = ParameterValue(use_sim_time, value_type=bool)
+
     map_odom_tf = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_map_odom_tf',
         arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom'],
-        parameters=[{'use_sim_time': True}],
+        parameters=[{'use_sim_time': use_sim_time_param}],
         condition=IfCondition(static_map_odom)
     )
 
@@ -39,7 +48,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav_launch'), 'launch', 'navigation_launch.py')),
             launch_arguments={
                 'autostart': 'true',
-                'use_sim_time': 'true', 
+                'use_sim_time': use_sim_time,
                 'params_file': params_path,
             }.items(),
             condition=IfCondition(launch_nav2)
@@ -53,6 +62,7 @@ def generate_launch_description():
     return LaunchDescription([
         launch_nav2_declaration,
         static_map_odom_declaration,
+        use_sim_time_declaration,
         map_odom_tf,
         nav2
     ])

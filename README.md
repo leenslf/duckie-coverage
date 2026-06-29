@@ -10,5 +10,8 @@ Documentation in [docs/](docs/) was maintained during the project.
 | [`nav2_notes.md`](docs/nav2_notes.md) | Some notes we maintained on nav2 usage in this project |
 | [`vio-and-slam.md`](./vio-and-slam.md) | Visual-inertial odometry and SLAM with RTAB-Map supporting oak-d pro and zed cam|
 | [`coverage.md`](./docs/coverage.md) | Notes of coverage planning and a tutotrial |
+| [`running_everything.md`](./docs/running_everything.md) | all steps to run the system |
  
 Check our [website](https://awwad-hamza.github.io/MOBOROBOT-Navigation-Coverage-Website/) for demos 
+
+Check [transform tree](frames_2026-05-10_11.19.23.pdf)
