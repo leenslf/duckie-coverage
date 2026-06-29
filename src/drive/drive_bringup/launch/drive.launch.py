@@ -24,7 +24,7 @@ def generate_launch_description():
                               description='Wheel radius (m)'),
         DeclareLaunchArgument('reduction_rate', default_value='25.0',
                               description='Gear reduction ratio'),
-        DeclareLaunchArgument('launch_inverse_kinematics', default_value='true',
+        DeclareLaunchArgument('launch_inverse_kinematics', default_value='false',
                               description='Whether to launch inverse_kinematics_node (odom + TF)'),
 
         # cmd_vel → motor RPM commands

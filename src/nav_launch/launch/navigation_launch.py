@@ -23,6 +23,7 @@ from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import LoadComposableNodes
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode, ParameterFile
+from launch_ros.parameter_descriptions import ParameterValue
 from nav2_common.launch import RewrittenYaml
 
 
@@ -30,6 +31,7 @@ def generate_launch_description():
 
     namespace = LaunchConfiguration('namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
+    use_sim_time_param = ParameterValue(use_sim_time, value_type=bool)
     autostart = LaunchConfiguration('autostart')
     params_file = LaunchConfiguration('params_file')
     use_composition = LaunchConfiguration('use_composition')
@@ -185,7 +187,7 @@ def generate_launch_description():
                 name='lifecycle_manager_navigation',
                 output='screen',
                 arguments=['--ros-args', '--log-level', log_level],
-                parameters=[{'use_sim_time': use_sim_time},
+                parameters=[{'use_sim_time': use_sim_time_param},
                             {'autostart': autostart},
                             {'node_names': lifecycle_nodes}]),
         ]
@@ -242,7 +244,7 @@ def generate_launch_description():
                 package='nav2_lifecycle_manager',
                 plugin='nav2_lifecycle_manager::LifecycleManager',
                 name='lifecycle_manager_navigation',
-                parameters=[{'use_sim_time': use_sim_time,
+                parameters=[{'use_sim_time': use_sim_time_param,
                              'autostart': autostart,
                              'node_names': lifecycle_nodes}]),
         ],

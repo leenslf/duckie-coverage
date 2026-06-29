@@ -75,7 +75,7 @@ def launch_setup(context, *args, **kwargs):
         camera_type,
         LaunchConfiguration('camera_parent_frame').perform(context),
     )
-    use_sim_time = LaunchConfiguration('use_sim_time').perform(context)
+    use_sim_time = LaunchConfiguration('use_sim_time').perform(context).lower() == 'true'
     publish_static_tf = LaunchConfiguration('publish_static_tf').perform(context).lower() == 'true'
 
     is_oak = camera_type == 'oak'
